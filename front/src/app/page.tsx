@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
     <div>
-      <Button>Click ME</Button>
+      <Register/>
     </div>
     </>
   )
