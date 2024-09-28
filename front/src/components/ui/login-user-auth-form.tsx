@@ -7,7 +7,7 @@ import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import Link from 'next/link'
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
@@ -27,39 +27,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
-          <Label className="sr-only" htmlFor="imageUpload">
-              Photo
-            </Label>
-            <Input
-              id="imageUpload"
-              placeholder="John"
-              type="file"
-              disabled={isLoading}
-            />
-            <Label className="sr-only" htmlFor="fname">
-              First Name
-            </Label>
-            <Input
-              id="fname"
-              placeholder="John"
-              type="text"
-              autoCapitalize="none"
-              autoComplete="fname"
-              autoCorrect="off"
-              disabled={isLoading}
-            />
-            <Label className="sr-only" htmlFor="lname">
-              Last Name
-            </Label>
-            <Input
-              id="lname"
-              placeholder="Doe"
-              type="text"
-              autoCapitalize="none"
-              autoComplete="lname"
-              autoCorrect="off"
-              disabled={isLoading}
-            />
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
@@ -89,16 +56,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Login
           </Button>
           <br></br>
-          <p className="bg-background px-2 text-muted-foreground">Account already exists?</p>
-          <Button disabled={isLoading}>
+          <span className="bg-background px-2 text-muted-foreground">Don't have an Account?</span>
+          <Link className="grid" href="/register"><Button disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Login 
-          </Button>
+            Register 
+          </Button></Link>
         </div>
       </form>
       <div className="relative">
