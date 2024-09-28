@@ -1,17 +1,37 @@
 "use client"
 
-import * as React from "react"
+import React, {useState} from "react";
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/ui/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Link from 'next/link'
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from 'next/link';
+import Map from "@/components/ui/maps";
+
+interface LatLng {
+  lat: number;
+  lng: number;
+}
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+
+
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [location, setLocation] = useState<LatLng | null>(null);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (location) {
+      // Handle form submission here, such as sending the selected location to a backend API
+      console.log("Selected Location:", location);
+    } else {
+      console.log("No location selected.");
+    }
+  };
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
@@ -36,6 +56,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               type="file"
               disabled={isLoading}
             />
+            <Label htmlFor="location">
+              <Map setLocation={setLocation} />
+            </Label>
             <Label className="sr-only" htmlFor="fname">
               First Name
             </Label>
