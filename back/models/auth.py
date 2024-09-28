@@ -59,7 +59,7 @@ class UserLogin(BaseModel):
 class UserBase(BaseModel):
     username: str = Field(min_length=3, max_length=50)
     email: EmailStr = Field(max_length=50)
-    location: tuple[float, float] | None = None
+    location: str | None = None
     coordinates: tuple[float, float] | None = None
     recurring_availability: RecurringAvailability | None = None
     not_available: NotAvailable | None = None

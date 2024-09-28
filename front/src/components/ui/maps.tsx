@@ -86,14 +86,14 @@ export default function LocationSearchInput({
         />
       </Autocomplete>
 
-      {selectedPosition && (
+      {/* {selectedPosition && (
         <div>
           <p>
             Selected Location: Latitude {selectedPosition.lat}, Longitude{" "}
             {selectedPosition.lng}
           </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
