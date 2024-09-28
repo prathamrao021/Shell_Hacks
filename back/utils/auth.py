@@ -133,7 +133,6 @@ async def register_user(
             "updatedAt": datetime.now(),
             "emailVerificationToken": hashed_token,
             "emailVerificationExpiry": token_expiry,
-            "loginType": UserLoginType.EMAIL_PASSWORD,
             "isEmailVerified": False,
             "refreshToken": None,
             "forgotPasswordToken": None,
