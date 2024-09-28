@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Annotated
 from bson import ObjectId
 from .auth import PyObjectId  
 from enum import Enum
@@ -24,7 +24,7 @@ class Event(BaseModel):
     category: EventCategory
     number_of_volunteers_required: int
     description: str
-    posted_by: PyObjectId
+    posted_by: str
     current_volunteers: List[str] = []
     start_time: datetime
     end_time: datetime
