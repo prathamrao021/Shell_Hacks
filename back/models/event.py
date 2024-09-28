@@ -19,6 +19,7 @@ class Status(str, Enum):
 
 class Event(BaseModel):
     location: str
+    coordinates : tuple[float, float] | None = None
     time: datetime
     category: EventCategory
     number_of_volunteers_required: int
