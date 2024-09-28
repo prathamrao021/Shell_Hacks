@@ -3,6 +3,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Annotated, Any
 from bson import ObjectId
+from datetime import time, date
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -18,16 +19,21 @@ class PyObjectId(ObjectId):
     @classmethod
     def __get_pydantic_json_schema__(cls, *args, **kwargs):
         return {"bsonType": "objectId"}
-        
-class UserRoles(str, Enum):
-    ADMIN = "ADMIN"
-    USER = "USER"
 
+class Day(str, Enum):
+    MONDAY = "Monday"
+    TUESDAY = "Tuesday"
+    WEDNESDAY = "Wednesday"
+    THURSDAY = "Thursday"
+    FRIDAY = "Friday"
+    SATURDAY = "Saturday"
+    SUNDAY = "Sunday" 
 
-class UserLoginType(str, Enum):
-    GOOGLE = "GOOGLE"
-    GITHUB = "GITHUB"
-    EMAIL_PASSWORD = "EMAIL_PASSWORD"
+class RecurringAvailability(BaseModel):
+    avail : dict[Day, list[time, time]] = {}
+
+class NotAvailable(BaseModel):
+    avail : dict[date, list[time, time]] = {}
 
 
 class Attachment(BaseModel):
@@ -53,7 +59,9 @@ class UserLogin(BaseModel):
 class UserBase(BaseModel):
     username: str = Field(min_length=3, max_length=50)
     email: EmailStr = Field(max_length=50)
-    role: UserRoles = UserRoles.USER
+    location: tuple[float, float] | None = None
+    recurring_availability: RecurringAvailability | None = None
+    not_available: NotAvailable | None = None
 
     @validator("email", "username", pre=True)
     def validate_email(cls, value):
@@ -70,8 +78,10 @@ class UserResponse(UserBase):
     createdAt: datetime
     updatedAt: datetime
     isEmailVerified: bool = False
-    loginType: UserLoginType = UserLoginType.EMAIL_PASSWORD
     v: Annotated[int, Field(alias='__v')] = 0
+    location: tuple[float, float] | None = None
+    recurring_availability: RecurringAvailability | None = None
+    not_available: NotAvailable | None = None
 
 class UserInDB(UserResponse):
     id: str = Field(default_factory=lambda: str(ObjectId()), alias="_id")
@@ -97,4 +107,3 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: str | None = None
     email: EmailStr | None = None
-    role: UserRoles | None = None

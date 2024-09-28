@@ -9,7 +9,7 @@ from utils.dbUtils import get_client
 from pymongo import MongoClient
 import os
 import secrets
-from models.auth import TokenData, UserResponse, UserRegister, UserInDB, UserLoginType
+from models.auth import TokenData, UserResponse, UserRegister, UserInDB 
 from models.responses import (
     RegisterAndCurrentUserResponse,
     EmailVerificationResponse,
