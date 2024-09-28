@@ -86,14 +86,6 @@ export default function LocationSearchInput({
         />
       </Autocomplete>
 
-      {/* <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={10}
-        center={selectedPosition || center}
-      >
-        {selectedPosition && <Marker position={selectedPosition} />}
-      </GoogleMap> */}
-
       {selectedPosition && (
         <div>
           <p>
