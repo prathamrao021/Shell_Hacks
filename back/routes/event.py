@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from utils.auth import verify_and_return_token
 from typing import Annotated
 from utils.event import insert_event, exclusive_events, accept_event
+from models.auth import PyObjectId
 
 router = APIRouter()
 
@@ -15,7 +16,7 @@ async def create_event(
     db: Annotated[MongoClient, Depends(get_client)],
     event: Event
 )-> Event:
-    event.posted_by = token["user_id"]
+    event.posted_by = token['username']
     return await insert_event(event, db)
 
 @router.get("/events")
