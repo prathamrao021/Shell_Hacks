@@ -27,6 +27,39 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
+          <Label className="sr-only" htmlFor="imageUpload">
+              Photo
+            </Label>
+            <Input
+              id="imageUpload"
+              placeholder="John"
+              type="file"
+              disabled={isLoading}
+            />
+            <Label className="sr-only" htmlFor="fname">
+              First Name
+            </Label>
+            <Input
+              id="fname"
+              placeholder="John"
+              type="text"
+              autoCapitalize="none"
+              autoComplete="fname"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+            <Label className="sr-only" htmlFor="lname">
+              Last Name
+            </Label>
+            <Input
+              id="lname"
+              placeholder="Doe"
+              type="text"
+              autoCapitalize="none"
+              autoComplete="lname"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
@@ -39,12 +72,32 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="password(minimun 8 characters)"
+              type="password"
+              autoCapitalize="none"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+            
           </div>
           <Button disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             Sign In with Email
+          </Button>
+          <br></br>
+          <p className="bg-background px-2 text-muted-foreground">Account already exists?</p>
+          <Button disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Login 
           </Button>
         </div>
       </form>
@@ -65,6 +118,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.gitHub className="mr-2 h-4 w-4" />
         )}{" "}
         GitHub
+      </Button>
+      <Button variant="outline" type="button" disabled={isLoading}>
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Icons.google className="mr-2 h-4 w-4" />
+        )}{" "}
+        Google
       </Button>
     </div>
   )
