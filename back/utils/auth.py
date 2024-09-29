@@ -479,4 +479,12 @@ async def modify_user_util(
 ) -> LoginResponse:
     user = db.users.find({"username": username})
     db.users.update_one({"username": username}, {"$set": {"recurring_availability": recurring_avail.model_dump()}})
-    return user
+    response = LoginResponse(
+        message="User modified successfully",
+        statusCode=200,
+        success=True,
+        data=LoginData(
+            user=UserResponse(**user),
+        ),
+    )
+    return response
