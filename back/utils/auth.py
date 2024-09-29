@@ -472,7 +472,7 @@ async def resend_email_verification(
         success=True,
     )
 
-async def modify_user(
+async def modify_user_util(
     db: MongoClient,
     username: str,
     recurring_avail: RecurringAvailability

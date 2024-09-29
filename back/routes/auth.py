@@ -22,7 +22,8 @@ from utils.auth import (
     logout_user,
     change_password,
     resend_email_verification,
-    verify_and_return_token
+    verify_and_return_token,
+    modify_user_util,
 )
 router = APIRouter()
 
@@ -121,4 +122,4 @@ async def modify_user(
     db: Annotated[MongoClient, Depends(get_client)],
     recurring_avail: RecurringAvailability
 )-> LoginResponse:
-    return await modify_user(db, token["username"], recurring_avail)
+    return await modify_user_util(db, token["username"], recurring_avail)
