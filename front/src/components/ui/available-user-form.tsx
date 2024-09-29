@@ -1,10 +1,11 @@
 "use client";
-
-import React, { useState } from "react";
+// import Cookies from 'js-cookie';
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Console } from "console";
 
 interface TimeSlot {
   start: string;
@@ -37,6 +38,40 @@ export function AvailableForm({ className, ...props }: React.HTMLAttributes<HTML
     Sunday: [{ start: "", end: "" }],
   });
 
+  useEffect(() => {
+
+    const fetchCurrentUser = async () => {
+      // const token = localStorage.getItem('token');
+      // set token in session cookie usind set_cookie
+      try {
+        const response = await fetch("http://localhost:8000/users/current-user", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // "Authorization": `Bearer ${token}`,
+          },
+          credentials: "include",
+          // body: JSON.stringify({ token }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("data", data.data.username);
+          if(data.data.recurring_availabilty){
+            window.location.href = "/ListEvent";
+          }
+        } else {
+          console.error("Registration failed:", response.statusText);
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+
   // Add a time slot for the day
   const handleAddTimeSlot = (day: string) => {
     setAvailability((prevAvailability) => ({
@@ -45,17 +80,7 @@ export function AvailableForm({ className, ...props }: React.HTMLAttributes<HTML
     }));
   };
 
-  // Handle the change in time inputs
-  const handleTimeChange = (day: string, index: number, field: "start" | "end", value: string) => {
-    const updatedSlots = availability[day].map((slot, i) =>
-      i === index ? { ...slot, [field]: value } : slot
-    );
-    setAvailability((prevAvailability) => ({
-      ...prevAvailability,
-      [day]: updatedSlots,
-    }));
-  };
-
+  
   // Remove a time slot for the day
   const handleRemoveTimeSlot = (day: string, index: number) => {
     const updatedSlots = availability[day].filter((_, i) => i !== index);
@@ -64,14 +89,59 @@ export function AvailableForm({ className, ...props }: React.HTMLAttributes<HTML
       [day]: updatedSlots,
     }));
   };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleTimeChange = (day: string, index: number, field: "start" | "end", value: string) => {
+    // Ensure the time value includes seconds
+    const timeWithSeconds = value.includes(":") && value.split(":").length === 2 ? `${value}:00` : value;
+    console.log("timeWithSeconds", timeWithSeconds);
+    const updatedSlots = availability[day].map((slot, i) =>
+      i === index ? { ...slot, [field]: timeWithSeconds } : slot
+    );
+    setAvailability((prevAvailability) => ({
+      ...prevAvailability,
+      [day]: updatedSlots,
+    }));
+  };
+  
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    console.log("User Availability:", availability);
+      // Process the availability data
+    const processedData = Object.entries(availability).reduce((acc, [day, slots]) => {
+      acc[day] = slots.map(slot => [slot.start, slot.end]);
+      return acc;
+    }, {} as { [key: string]: string[][] });
+  
+    // Log the processed data
+    console.log("Processed Data:", processedData);
+    
+    try {
+      const response = await fetch("http://localhost:8000/users/user", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // "Authorization": `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ processedData }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data", data.data.username);
+        if(data.data.recurring_availabilty){
+          window.location.href = "/ListEvent";
+        }
+      } else {
+        console.error("Registration failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+
+    // Simulate a form submission delay
     setTimeout(() => {
       setIsLoading(false);
-    }, 3000); // Simulate a form submission delay
+    }, 3000);
   };
 
   return (

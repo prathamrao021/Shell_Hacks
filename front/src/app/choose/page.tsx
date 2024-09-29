@@ -1,9 +1,13 @@
 "use client"
 import { Button } from "@/components/ui/button"; 
 import Link from 'next/link';
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function ChoosePage() {
+
+  useEffect(() => {
+    console.log(localStorage.getItem('token'));
+  }, []);
   
   const handleVolunteer = async()=> {
     localStorage.setItem('role', 'volunteer');

@@ -49,8 +49,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Registration successful:", data);
-        window.location.href = "/choose";
+        // console.log("Registration successful:", data);
+        // await localStorage.setItem('token', data.token);
+        window.location.href = "/login";
       } else {
         console.error("Registration failed:", response.statusText);
       }
