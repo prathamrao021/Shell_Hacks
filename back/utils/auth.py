@@ -9,7 +9,7 @@ from utils.dbUtils import get_client
 from pymongo import MongoClient
 import os
 import secrets
-from models.auth import TokenData, UserResponse, UserRegister, UserInDB 
+from models.auth import TokenData, UserResponse, UserRegister, UserInDB, RecurringAvailability
 from models.responses import (
     RegisterAndCurrentUserResponse,
     EmailVerificationResponse,
@@ -471,3 +471,12 @@ async def resend_email_verification(
         statusCode=200,
         success=True,
     )
+
+async def modify_user(
+    db: MongoClient,
+    username: str,
+    recurring_avail: RecurringAvailability
+) -> LoginResponse:
+    user = db.users.find({"username": username})
+    db.users.update_one({"username": username}, {"$set": {"recurring_availability": recurring_avail.model_dump()}})
+    return user
