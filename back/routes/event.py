@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from utils.auth import verify_and_return_token
 from typing import Annotated
 from utils.event import insert_event, exclusive_events, accept_event
-from models.auth import PyObjectId
+from models.auth import PyObjectId, RecurringAvailability
 
 router = APIRouter()
 
@@ -24,11 +24,11 @@ async def get_events(
     token: Annotated[dict, Depends(verify_and_return_token)],
     db: Annotated[MongoClient, Depends(get_client)],
 )-> list[Event]:
-    return await exclusive_events(db, token["user_id"])
+    return await exclusive_events(db, token["username"])
 
 @router.patch("/event/{event_id}")
 async def accept_event(
     token: Annotated[dict, Depends(verify_and_return_token)],
     db: Annotated[MongoClient, Depends(get_client)],
     event_id: str)-> Event:
-    return await accept_event(event_id, db, token["user_id"])
+    return await accept_event(event_id, db, token["username"])

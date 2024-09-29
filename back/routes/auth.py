@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends, status, Request, Response, Cookie
-from models.auth import UserRegister, UserResponse, Token, UserLogin
+from models.auth import UserRegister, UserResponse, Token, UserLogin, RecurringAvailability
 from models.responses import (
     RegisterAndCurrentUserResponse,
     EmailVerificationResponse,
     LoginResponse,
     RefreshTokenResponse,
-    BaseResponse
+    BaseResponse,
 )
 from utils.dbUtils import get_client
 from typing import Annotated
@@ -113,3 +113,12 @@ async def re_verify_email(
     db: Annotated[MongoClient, Depends(get_client)],
 ) -> BaseResponse:
     return await resend_email_verification(token, request, db)
+
+
+@router.patch("/user")
+async def modify_user(
+    token: Annotated[dict, Depends(verify_and_return_token)],
+    db: Annotated[MongoClient, Depends(get_client)],
+    recurring_avail: RecurringAvailability
+)-> LoginResponse:
+    return await modify_user(db, token["username"], recurring_avail)
